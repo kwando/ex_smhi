@@ -31,6 +31,7 @@ defmodule ExSMHI.MixProject do
   def package() do
     [
       licenses: ["MIT"],
+      maintainers: ["Hannes Nevalainen"],
       description: "Get forecasts from the Swedish Meterology Institute",
       links: %{
         "GitHub" => "https://github.com/kwando/ex_smhi"
