@@ -7,7 +7,8 @@ defmodule ExSMHI.MixProject do
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -24,6 +25,16 @@ defmodule ExSMHI.MixProject do
       {:jason, ">= 0.0.0"},
       {:mint, ">= 0.0.0"},
       {:mix_test_watch, ">= 0.0.0", only: :dev, runtime: false}
+    ]
+  end
+
+  def package() do
+    [
+      licenses: ["MIT"],
+      description: "Get forecasts from the Swedish Meterology Institute",
+      links: %{
+        "GitHub" => "https://github.com/kwando/ex_smhi"
+      }
     ]
   end
 end
