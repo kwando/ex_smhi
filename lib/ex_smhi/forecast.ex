@@ -2,15 +2,17 @@ defmodule ExSMHI.Forecast do
   defstruct [:approvedTime, :referenceTime, :geometry, :timeSeries]
 
   defmodule TimeSerie do
+    @derive {Inspect, only: [:validTime]}
     defstruct [:validTime, :parameters]
   end
 
   defmodule Parameter do
-    defstruct [:name, :levelType, :level, :unit, :values]
+    @derive {Inspect, only: [:name, :value, :unit]}
+    defstruct [:name, :levelType, :level, :unit, :value]
   end
 
   def extract_series(%{timeSeries: series}, name, opts \\ []) do
-    parameter_mapper = Keyword.get(opts, :mapper, fn %{values: [v]} -> v end)
+    parameter_mapper = Keyword.get(opts, :mapper, fn %{value: v} -> v end)
 
     Enum.reduce(series, [], fn serie, acc ->
       param = serie.parameters |> Enum.find(fn p -> p.name == name end)
@@ -62,4 +64,44 @@ defmodule ExSMHI.Forecast do
       unquote(symbol)
     end
   end
+
+  @spec forecast_for_time(ExSMHI.Forecast.t(), any) :: any
+  def forecast_for_time(%__MODULE__{timeSeries: series} = forecast, datetime) do
+    first = hd(series)
+
+    DateTime.compare(forecast.referenceTime, datetime)
+    |> case do
+      :lt ->
+        DateTime.compare(first.validTime, datetime)
+        |> case do
+          :gt ->
+            {:ok, first}
+
+          _ ->
+            find_series(series, datetime)
+        end
+
+      :gt ->
+        {:error, :out_of_range}
+    end
+  end
+
+  def current_forecast(forecast) do
+    forecast
+    |> forecast_for_time(DateTime.utc_now())
+  end
+
+  defp find_series([a, b | rest], datetime) do
+    if(
+      DateTime.compare(a.validTime, datetime) == :lt and
+        DateTime.compare(b.validTime, datetime) !== :lt
+    ) do
+      {:ok, a}
+    else
+      find_series([b | rest], datetime)
+    end
+  end
+
+  defp find_series([], _), do: {:error, :out_of_range}
+  defp find_series([_], _), do: {:error, :out_of_range}
 end

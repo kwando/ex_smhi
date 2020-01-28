@@ -1,13 +1,9 @@
 defmodule ExSMHI do
-  defmodule Location do
-    defstruct [:latitude, :longitude]
+  alias ExSMHI.{Forecasts, HTTP}
 
-    def from({latitude, longitude}) when is_number(latitude) and is_number(longitude) do
-      {:ok, %__MODULE__{longitude: longitude, latitude: latitude}}
-    end
-
-    def from(input) do
-      {:error, {:invalid_location, input}}
-    end
+  def get_forecast(location) do
+    location
+    |> Forecasts.get_forecast()
+    |> HTTP.request()
   end
 end

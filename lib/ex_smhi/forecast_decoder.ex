@@ -1,4 +1,5 @@
 defmodule ExSMHI.ForecastDecoder do
+  @spec decode(binary()) :: {:ok, %ExSMHI.Forecast{}}
   def decode(binary) do
     with {:ok, data} = Jason.decode(binary) do
       forecast = %ExSMHI.Forecast{
@@ -37,8 +38,10 @@ defmodule ExSMHI.ForecastDecoder do
         levelType: parameter["levelType"],
         level: parameter["level"],
         unit: parameter["unit"],
-        values: parameter["values"]
+        value: parameter["values"] |> value()
       }
     end
   end
+
+  defp value([value]), do: value
 end
