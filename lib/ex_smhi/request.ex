@@ -12,7 +12,7 @@ defmodule ExSMHI.HTTP.Request do
   defimpl Inspect, for: __MODULE__ do
     import Inspect.Algebra
 
-    def inspect(request, opts) do
+    def inspect(request, _opts) do
       concat(["<HTTP.Request #{request.method} #{request.url}>"])
     end
   end

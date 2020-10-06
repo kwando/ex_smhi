@@ -65,7 +65,6 @@ defmodule ExSMHI.Forecast do
     end
   end
 
-  @spec forecast_for_time(ExSMHI.Forecast.t(), any) :: any
   def forecast_for_time(%__MODULE__{timeSeries: series} = forecast, datetime) do
     first = hd(series)
 
