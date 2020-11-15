@@ -4,7 +4,7 @@
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package is available on Hex and can be installed
 by adding `ex_smhi` to your list of dependencies in `mix.exs`:
 
 ```elixir
