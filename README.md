@@ -1,6 +1,6 @@
 # ExSmhi
+![example workflow name](https://github.com/kwando/ex_smhi/workflows/Elixir%20CI/badge.svg)
 
-**TODO: Add description**
 
 ## Installation
 
