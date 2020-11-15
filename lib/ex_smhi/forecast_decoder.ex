@@ -1,7 +1,10 @@
 defmodule ExSMHI.ForecastDecoder do
   @spec decode(binary()) :: {:ok, %ExSMHI.Forecast{}}
+  @moduledoc """
+  Functionality for converting JSON body into a ExSMHI.Forecast struct
+  """
   def decode(binary) do
-    with {:ok, data} = Jason.decode(binary) do
+    with {:ok, data} <- Jason.decode(binary) do
       forecast = %ExSMHI.Forecast{
         approvedTime: timestamp(data["approvedTime"]),
         referenceTime: timestamp(data["referenceTime"]),

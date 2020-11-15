@@ -1,4 +1,7 @@
 defmodule ExSMHI.HTTP.Request do
+  @moduledoc """
+  Representation of an HTTP request
+  """
   defstruct [:method, :url, headers: [], body: nil, options: [], response_transforms: []]
 
   def get(url_or_path) do

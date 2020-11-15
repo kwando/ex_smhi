@@ -1,14 +1,23 @@
 defmodule ExSMHI.Forecast do
+  @moduledoc """
+  Representation of a forecast.
+  """
   defstruct [:approvedTime, :referenceTime, :geometry, :timeSeries]
 
   defmodule TimeSerie do
-    @derive {Inspect, only: [:validTime]}
+    @moduledoc """
+    TimeSeries representation
+    """
     defstruct [:validTime, :parameters]
+    @derive {Inspect, only: [:validTime]}
   end
 
   defmodule Parameter do
-    @derive {Inspect, only: [:name, :value, :unit]}
+    @moduledoc """
+    Parameter representation
+    """
     defstruct [:name, :levelType, :level, :unit, :value]
+    @derive {Inspect, only: [:name, :value, :unit]}
   end
 
   def extract_series(%{timeSeries: series}, name, opts \\ []) do
@@ -29,7 +38,7 @@ defmodule ExSMHI.Forecast do
   def precipitation_category(5), do: "Freezing rain"
   def precipitation_category(6), do: "Freezing drizzle"
 
-  wheatherSumbols = [
+  wheather_symbols = [
     {1, "Clear sky"},
     {2, "Nearly clear sky"},
     {3, "Variable cloudiness"},
@@ -59,7 +68,7 @@ defmodule ExSMHI.Forecast do
     {27, "Heavy snowfall"}
   ]
 
-  for {id, symbol} <- wheatherSumbols do
+  for {id, symbol} <- wheather_symbols do
     def weather_symbol(unquote(id)) do
       unquote(symbol)
     end
@@ -90,17 +99,15 @@ defmodule ExSMHI.Forecast do
     |> forecast_for_time(DateTime.utc_now())
   end
 
+  defp find_series([], _), do: {:error, :out_of_range}
+  defp find_series([_], _), do: {:error, :out_of_range}
+
   defp find_series([a, b | rest], datetime) do
-    if(
-      DateTime.compare(a.validTime, datetime) == :lt and
-        DateTime.compare(b.validTime, datetime) !== :lt
-    ) do
+    if DateTime.compare(a.validTime, datetime) == :lt and
+         DateTime.compare(b.validTime, datetime) !== :lt do
       {:ok, a}
     else
       find_series([b | rest], datetime)
     end
   end
-
-  defp find_series([], _), do: {:error, :out_of_range}
-  defp find_series([_], _), do: {:error, :out_of_range}
 end

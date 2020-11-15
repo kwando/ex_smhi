@@ -2,6 +2,10 @@ defmodule ExSMHI.HTTP do
   alias ExSMHI.HTTP
   require Logger
 
+  @moduledoc """
+  Interface for doing HTTP requests
+  """
+
   def request(%HTTP.Request{} = request, _opts \\ []) do
     Logger.debug("executing request #{inspect(request)}")
 

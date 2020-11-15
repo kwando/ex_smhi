@@ -1,12 +1,15 @@
 defmodule ExSMHI.Forecasts do
+  @moduledoc """
+  High level functions for fething forecasts.
+  """
   alias ExSMHI.HTTP.Request
   alias ExSMHI.Utils
-  @baseUrl "https://opendata-download-metfcst.smhi.se"
+  @base_url "https://opendata-download-metfcst.smhi.se"
   def get_forecast(location) do
     {:ok, loc} = ExSMHI.Location.from(location)
 
     "~s/api/category/pmp3g/version/2/geotype/point/lon/~.6f/lat/~.6f/data.json"
-    |> Utils.format([@baseUrl, loc.longitude, loc.latitude])
+    |> Utils.format([@base_url, loc.longitude, loc.latitude])
     |> Request.get()
     |> Request.add_response_transform(:extract_body)
     |> Request.add_response_transform(fn body ->
@@ -19,7 +22,7 @@ defmodule ExSMHI.Forecasts do
     version = Keyword.get(opts, :version, 2)
     category = Keyword.get(opts, :category, "pmp3g")
 
-    "#{@baseUrl}/api/category/#{category}/version/#{version}/validtime.json"
+    "#{@base_url}/api/category/#{category}/version/#{version}/validtime.json"
     |> Request.get()
     |> Request.add_response_transform(:decode_json)
     |> Request.add_response_transform(&parse_validtime/1)

@@ -1,4 +1,7 @@
 defmodule ExSMHI.Location do
+  @moduledoc """
+  Representation of a location.
+  """
   defstruct [:latitude, :longitude]
 
   def from({latitude, longitude}) when is_number(latitude) and is_number(longitude) do
