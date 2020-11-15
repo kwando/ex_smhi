@@ -24,6 +24,7 @@ defmodule ExSMHI.MixProject do
     [
       {:jason, ">= 0.0.0"},
       {:hackney, ">= 0.0.0"},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:mix_test_watch, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
