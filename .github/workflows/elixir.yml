@@ -23,4 +23,4 @@ jobs:
       - name: Run tests
         run: mix test
       - name: Run credo
-        run: mix credo --strict
+        run: mix credo --strict --all
