@@ -8,16 +8,16 @@ defmodule ExSMHI.Forecast do
     @moduledoc """
     TimeSeries representation
     """
-    defstruct [:validTime, :parameters]
     @derive {Inspect, only: [:validTime]}
+    defstruct [:validTime, :parameters]
   end
 
   defmodule Parameter do
     @moduledoc """
     Parameter representation
     """
-    defstruct [:name, :levelType, :level, :unit, :value]
     @derive {Inspect, only: [:name, :value, :unit]}
+    defstruct [:name, :levelType, :level, :unit, :value]
   end
 
   def extract_series(%{timeSeries: series}, name, opts \\ []) do
